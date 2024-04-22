@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
+import { ICreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { IProductService } from './interfaces/product.service';
+import { ResData } from 'src/lib/resData';
+import { ProductEntity } from './entities/product.entity';
 
 @Injectable()
-export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+export class ProductsService implements IProductService {
+  async create(createProductDto: ICreateProductDto):Promise<ResData<ProductEntity>> {
+    const  newProduct = new ProductEntity();
+    newProduct.title = createProductDto.title;
+    newProduct.price = createProductDto.price;
+    newProduct.oldPrice = createProductDto.oldPrice;
+    newProduct.category = createProductDto.category;
+    newProduct.units = createProductDto.units;
+    newProduct.description = createProductDto.description;
+    throw new Error();
   }
 
-  findAll() {
-    return `This action returns all products`;
+  async findAll(limit: number):Promise<ResData<ProductEntity[]>> {
+    throw new Error();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: number): Promise<ResData<ProductEntity>> {
+    throw new Error();
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: number, updateProductDto: UpdateProductDto): Promise<ResData<ProductEntity>> {
+    throw new Error();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} product`;
+  async remove(entity: ProductEntity): Promise<ResData<ProductEntity>> {
+    throw new Error();
   }
 }

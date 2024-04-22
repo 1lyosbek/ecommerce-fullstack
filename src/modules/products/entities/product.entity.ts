@@ -6,7 +6,7 @@ export class ProductEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ name: "title", type: "varchar", nullable: false })
+    @Column({ name: "title", type: "varchar", nullable: false, unique: true})
     title: string;
 
     @Column({ type: "numeric", nullable: false })
@@ -15,13 +15,13 @@ export class ProductEntity {
     @Column({ name: "old_price", type: "numeric", nullable: true})
     oldPrice: number;
 
-    @Column({ name: "category", type: "enum", enum: ['admin', 'user', 'owner'], nullable: false })
+    @Column({ name: "category", type: "varchar", nullable: false})
     category: string;
 
     @Column({ name: "units", type: "varchar", nullable: false })
     units: string;
 
-    @Column({ name: "description", type: "varchar", nullable: true })
+    @Column({ name: "description", type: "text", nullable: true })
     description: string;
 
     @Column({ name: "urls", type: "varchar", nullable: false })

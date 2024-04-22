@@ -7,9 +7,23 @@ import { UserEntity } from './modules/users/entities/user.entity';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProductEntity } from './modules/products/entities/product.entity';
 import { CategoryEntity } from './modules/categories/entities/category.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
+
+
+
+console.log('http://localhost:7777/', join(__dirname, '..', 'upload'));
+
+
+
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'upload'),
+      serveRoot: '/upload',
+    }),
     TypeOrmModule.forRoot({
     type: 'postgres',
     host: 'localhost',

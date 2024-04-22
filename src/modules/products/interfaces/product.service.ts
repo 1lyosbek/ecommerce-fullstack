@@ -1,9 +1,12 @@
+import { ResData } from "src/lib/resData";
+import { ICreateProductDto } from "../dto/create-product.dto";
+import { UpdateProductDto } from "../dto/update-product.dto";
 import { ProductEntity } from "../entities/product.entity";
 
-export interface IProductRepository {
-    getById(id: number): Promise<ProductEntity>;
-    getAll(): Promise<ProductEntity[]>;
-    create(entity: ProductEntity): Promise<ProductEntity>;
-    update(entity: ProductEntity): Promise<ProductEntity>;
-    delete(entity: ProductEntity): Promise<ProductEntity>;
+export interface IProductService {
+    findOne(id: number): Promise<ResData<ProductEntity>>;
+    findAll(limit: number): Promise<ResData<ProductEntity[]>>;
+    create(createProductDto: ICreateProductDto): Promise<ResData<ProductEntity>>;
+    update(id: number, updateProductDto: UpdateProductDto): Promise<ResData<ProductEntity>>;
+    remove(entity: ProductEntity): Promise<ResData<ProductEntity>>;
 }

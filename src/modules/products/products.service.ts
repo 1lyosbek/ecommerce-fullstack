@@ -15,7 +15,7 @@ export class ProductsService implements IProductService {
     const paths = [];
     for (let i = 0; i < files.length; i++) {
       const element = files[i];
-      element.path = `http://localhost:7777/${element.path}`
+      element.path = `https://ecommerceapi.firdavsdev.uz/${element.path}`
       paths.push(element.path);
     }
     newProduct.title = createProductDto.title;

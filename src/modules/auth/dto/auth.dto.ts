@@ -28,7 +28,8 @@ export class RegisterDto {
   phones: Array<string>;
 
   @ApiProperty({
-    type: String,
+    enum: RoleEnum,
+    example: RoleEnum.USER,
   })
   @IsNotEmpty()
   @IsEnum(RoleEnum)

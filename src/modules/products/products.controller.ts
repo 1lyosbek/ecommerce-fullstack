@@ -1,10 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFiles } from '@nestjs/common';
-import { ProductsService } from './modules/products/products.service';
-import { ICreateProductDto } from './modules/products/dto/create-product.dto';
-import { UpdateProductDto } from './modules/products/dto/update-product.dto';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseIntPipe, UseInterceptors, UploadedFiles, Put } from '@nestjs/common';
+import { ProductsService } from './products.service';
+import { ICreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { ProductEntity } from './modules/products/entities/product.entity';
+import { ProductEntity } from './entities/product.entity';
 import { fileOptions } from 'src/lib/fileOpitions';
 
 @ApiTags('products')
@@ -42,9 +42,9 @@ export class ProductsController {
     },
   })
   @UseInterceptors(FilesInterceptor('files', 3, fileOptions))
-  create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: ICreateProductDto) {
+  async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: ICreateProductDto) {
     console.log(files);
-    console.log(dto);
+    return await this.productsService.create(files, dto);
   }
   @ApiQuery({
     name: 'limit',
@@ -59,24 +59,29 @@ export class ProductsController {
     description: 'For count'
   })
   @Get()
-  findAll(@Query('limit', ParseIntPipe) limit: number, @Query('count', ParseIntPipe) count: number,) {
+  async findAll(@Query('limit', ParseIntPipe) limit: number, @Query('count', ParseIntPipe) count: number,) {
     const limitt = count * limit
-    return this.productsService.findAll(limitt);
+    return await this.productsService.findAll(limitt);
+  }
+  @Get('')
+  async findByCategory(@Query('limit', ParseIntPipe) limit: number, @Query('count', ParseIntPipe) count: number,) {
+    const limitt = count * limit
+    return await this.productsService.findAll(limitt);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.productsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    return await this.productsService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    let a: ProductEntity;
-    return this.productsService.remove(a);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    const {data: foundProduct } = await this.productsService.findOne(id);
+    return this.productsService.remove(foundProduct);
   }
 }

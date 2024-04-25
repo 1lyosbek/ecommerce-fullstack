@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import { ProductEntity } from "./entities/product.entity";
 
 export class ProductRepository implements IProductRepository{
-    constructor(@InjectRepository(ProductRepository) private repository: Repository<ProductEntity>) {}
+    constructor(@InjectRepository(ProductEntity) private repository: Repository<ProductEntity>) {}
     async getAll(limit: number): Promise<ProductEntity[]> {
         return await this.repository.find({take: limit});
     }

@@ -6,7 +6,7 @@ import { ProductEntity } from "../entities/product.entity";
 export interface IProductService {
     findOne(id: number): Promise<ResData<ProductEntity>>;
     findAll(limit: number): Promise<ResData<ProductEntity[]>>;
-    create(createProductDto: ICreateProductDto): Promise<ResData<ProductEntity>>;
+    create(files: Array<Express.Multer.File>, createProductDto: ICreateProductDto): Promise<ResData<ProductEntity>>;
     update(id: number, updateProductDto: UpdateProductDto): Promise<ResData<ProductEntity>>;
     remove(entity: ProductEntity): Promise<ResData<ProductEntity>>;
 }

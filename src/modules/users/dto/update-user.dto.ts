@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { RoleEnum } from 'src/common/enums/enums';
 
 export class UpdateUserDto {
@@ -20,8 +20,8 @@ export class UpdateUserDto {
     @ApiPropertyOptional({
         type: Array,
     })
-    @IsOptional()
-    @IsString()
+    @IsOptional() 
+    @IsArray()
     phones: Array<string>;
 
     @ApiPropertyOptional({

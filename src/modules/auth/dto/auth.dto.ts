@@ -1,7 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsBoolean, IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { RoleEnum } from "src/common/enums/enums";
-import { ArrayContains } from "typeorm";
+import { IsArray, IsNotEmpty , IsString } from "class-validator";
 
 export class RegisterDto {
   @ApiProperty({
@@ -28,14 +26,6 @@ export class RegisterDto {
   phones: Array<string>;
 
   @ApiProperty({
-    enum: RoleEnum,
-    example: RoleEnum.USER,
-  })
-  @IsNotEmpty()
-  @IsEnum(RoleEnum)
-  role: RoleEnum;
-
-  @ApiProperty({
     type: String,
   })
   @IsNotEmpty()
@@ -48,14 +38,8 @@ export class RegisterDto {
   @IsNotEmpty()
   @IsString()
   password: string;
-
-  @ApiProperty({
-    type: Boolean,
-  })
-  @IsNotEmpty()
-  @IsBoolean()
-  isActive: boolean;
 }
+
 
 export class LoginDto {
   @ApiProperty({

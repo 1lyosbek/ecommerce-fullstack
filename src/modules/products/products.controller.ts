@@ -6,12 +6,15 @@ import { ApiBody, ApiConsumes, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { ProductEntity } from './entities/product.entity';
 import { fileOptions } from 'src/lib/fileOpitions';
+import { Auth } from 'src/common/decorator/auth.decorator';
+import { RoleEnum } from 'src/common/enums/enums';
 
 @ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
+  @Auth(RoleEnum.ADMIN, RoleEnum.OWNER)
   @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -48,37 +51,37 @@ export class ProductsController {
   }
   @ApiQuery({
     name: 'limit',
-    required: true,
+    required: false,
     type: Number,
     description: 'For limit'
   })
   @ApiQuery({
     name: 'count',
-    required: true,
+    required: false,
     type: Number,
     description: 'For count'
   })
   @Get()
-  async findAll(@Query('limit', ParseIntPipe) limit: number, @Query('count', ParseIntPipe) count: number,) {
-    const limitt = count * limit
+  async findAll(@Query('limit') limit: number, @Query('count') count: number) {
+    let limitt: number;
+    if (!(limit && count)) {
+      limitt = 10
+    }
     return await this.productsService.findAll(limitt);
   }
-  @Get('')
-  async findByCategory(@Query('limit', ParseIntPipe) limit: number, @Query('count', ParseIntPipe) count: number,) {
-    const limitt = count * limit
-    return await this.productsService.findAll(limitt);
-  }
+
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return await this.productsService.findOne(+id);
+  async findOne(@Param('id', ParseIntPipe) id: number) {
+    return await this.productsService.findOne(id);
   }
 
+  @Auth(RoleEnum.ADMIN, RoleEnum.OWNER)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
     return await this.productsService.update(+id, updateProductDto);
   }
-
+  @Auth(RoleEnum.OWNER)
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
     const {data: foundProduct } = await this.productsService.findOne(id);

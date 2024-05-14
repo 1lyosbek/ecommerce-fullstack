@@ -3,7 +3,9 @@ import { ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
-import { UserNameOrPasswordWrongException } from './exception/auth.exception';
+import { UserNameAlreadyExist, UserNameOrPasswordWrongException } from './exception/auth.exception';
+import { Auth } from 'src/common/decorator/auth.decorator';
+import { RoleEnum } from 'src/common/enums/enums';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -18,14 +20,16 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto) {
     return await this.authService.login(loginDto);
   }
+  
+  @Auth(RoleEnum.OWNER)
   @Post('sign-up')
-  async register(@Body() createDto: RegisterDto) {
+  async register(@Body() createDto: RegisterDto) {  
     const { data: foundUser } = await this.userService.findByUserName(
       createDto.UserName,
     );
 
     if (foundUser) {
-      throw new UserNameOrPasswordWrongException();
+      throw new UserNameAlreadyExist();
     } 
     return await this.authService.register(createDto);
   }

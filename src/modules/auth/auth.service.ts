@@ -8,6 +8,7 @@ import { UsersService } from '../users/users.service';
 import { UserEntity } from '../users/entities/user.entity';
 import { UserRepository } from '../users/users.repository';
 import { hashed, compare } from 'src/lib/bcrypt';
+import { RoleEnum } from 'src/common/enums/enums';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -45,10 +46,10 @@ export class AuthService implements IAuthService {
     newUser.FirstName = dto.FirstName;
     newUser.LastName = dto.LastName;
     newUser.phones = dto.phones;
-    newUser.role = dto.role;
+    newUser.role = RoleEnum.USER;
     newUser.UserName = dto.UserName;
     newUser.password = dto.password;
-    newUser.isActive = dto.isActive;
+    newUser.isActive = true;
     const savedUser = await this.userRepository.create(newUser);
 
     const token = await this.jwtService.signAsync({ id: savedUser.id });

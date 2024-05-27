@@ -9,6 +9,7 @@ import { ProductEntity } from './modules/products/entities/product.entity';
 import { CategoryEntity } from './modules/categories/entities/category.entity';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { connectionSource } from './common/config/database.config';
 
 
 
@@ -24,16 +25,7 @@ console.log('http://localhost:7777/', join(__dirname, '..', 'upload'));
       rootPath: join(__dirname, '..', 'upload'),
       serveRoot: '/upload',
     }),
-    TypeOrmModule.forRoot({
-    type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: '22$$iiII',
-    database: 'ecommerce',
-      entities: [UserEntity, ProductEntity, CategoryEntity],
-    synchronize: true,
-    }),
+    TypeOrmModule.forRoot(connectionSource),
     ProductsModule, CategoriesModule, UsersModule, AuthModule],
   controllers: [],
   providers: [],

@@ -1,7 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { config } from './config';
 
-console.log(__dirname);
 
 export const connectionSource: DataSourceOptions = {
     type: 'postgres',

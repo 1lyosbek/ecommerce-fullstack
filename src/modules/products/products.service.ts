@@ -6,6 +6,7 @@ import { ResData } from 'src/lib/resData';
 import { ProductEntity } from './entities/product.entity';
 import { ProductNotFoundException } from './exceptions/product.exceptions';
 import { ProductRepository } from './products.repository';
+import { IProductEntityCount } from './interfaces/product.repository';
 
 @Injectable()
 export class ProductsService implements IProductService {
@@ -31,9 +32,12 @@ export class ProductsService implements IProductService {
     return new ResData<ProductEntity>("success", "product created successfully", 201, createdProduct);
   }
 
-  async findAll(limit: number):Promise<ResData<ProductEntity[]>> {
-    const products = await this.productRepository.getAll(limit);
-    return new ResData<ProductEntity[]>("success", "products", 200, products);
+  async findAll(word: string, limit: number, page: number): Promise<ResData<IProductEntityCount>> {
+    limit = limit > 0 ? limit : 10;
+    page = page > 0 ? page : 1;
+    page = (page - 1) * limit;
+    const foundProducts = await this.productRepository.getAll(word, limit, page);
+    return new ResData<IProductEntityCount>("success", "products", 200, { products: foundProducts.products, count: foundProducts.count});
   }
 
   async findOne(id: number): Promise<ResData<ProductEntity>> {

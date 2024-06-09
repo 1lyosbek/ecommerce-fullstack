@@ -9,5 +9,6 @@ export interface ILoginData {
 
 export interface IAuthService {
   login(data: LoginDto): Promise<ResData<ILoginData>>;
-  register(data: RegisterDto): Promise<ResData<ILoginData>>;
+  registerUser(data: RegisterDto): Promise<ResData<ILoginData>>;
+  registerAdmin(data: RegisterDto): Promise<ResData<ILoginData>>;
 }

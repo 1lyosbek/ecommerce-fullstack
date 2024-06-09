@@ -40,7 +40,7 @@ export class AuthService implements IAuthService {
     });
   }
 
-  async register(dto: RegisterDto): Promise<ResData<ILoginData>> {
+  async registerUser(dto: RegisterDto): Promise<ResData<ILoginData>> {
     dto.password = await hashed(dto.password);
     const newUser = new UserEntity();
     newUser.FirstName = dto.FirstName;
@@ -56,6 +56,25 @@ export class AuthService implements IAuthService {
 
     return new ResData<ILoginData>('success', "user created successfully", HttpStatus.CREATED, {
       user: savedUser,
+      token,
+    });
+  }
+  async registerAdmin(dto: RegisterDto): Promise<ResData<ILoginData>> {
+    dto.password = await hashed(dto.password);
+    const newAdmin = new UserEntity();
+    newAdmin.FirstName = dto.FirstName;
+    newAdmin.LastName = dto.LastName;
+    newAdmin.phones = dto.phones;
+    newAdmin.role = RoleEnum.ADMIN;
+    newAdmin.UserName = dto.UserName;
+    newAdmin.password = dto.password;
+    newAdmin.isActive = true;
+    const savedAdmin = await this.userRepository.create(newAdmin);
+
+    const token = await this.jwtService.signAsync({ id: savedAdmin.id });
+
+    return new ResData<ILoginData>('success', "Admin created successfully", HttpStatus.CREATED, {
+      user: savedAdmin,
       token,
     });
   }

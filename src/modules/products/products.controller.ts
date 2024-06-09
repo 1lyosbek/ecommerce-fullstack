@@ -46,9 +46,14 @@ export class ProductsController {
   })
   @UseInterceptors(FilesInterceptor('files', 3, fileOptions))
   async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: ICreateProductDto) {
-    console.log(files);
     return await this.productsService.create(files, dto);
   }
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'For search'
+  })
   @ApiQuery({
     name: 'limit',
     required: false,
@@ -56,18 +61,14 @@ export class ProductsController {
     description: 'For limit'
   })
   @ApiQuery({
-    name: 'count',
+    name: 'page',
     required: false,
     type: Number,
-    description: 'For count'
+    description: 'For page'
   })
-  @Get()
-  async findAll(@Query('limit') limit: number, @Query('count') count: number) {
-    let limitt: number;
-    if (!(limit && count)) {
-      limitt = 10
-    }
-    return await this.productsService.findAll(limitt);
+  @Get('search')
+  async findAll(@Query('search') search: string, @Query('limit') limit: number, @Query('page') page: number) {
+    return await this.productsService.findAll(search, limit, page);
   }
 
 

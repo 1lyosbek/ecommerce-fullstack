@@ -10,6 +10,7 @@ import { CategoryEntity } from './modules/categories/entities/category.entity';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { connectionSource } from './common/config/database.config';
+import { AdminModule } from './modules/admin/admin.module';
 
 
 
@@ -26,7 +27,7 @@ console.log('http://localhost:7777/', join(__dirname, '..', 'upload'));
       serveRoot: '/upload',
     }),
     TypeOrmModule.forRoot(connectionSource),
-    ProductsModule, CategoriesModule, UsersModule, AuthModule],
+    ProductsModule, CategoriesModule, UsersModule, AuthModule, AdminModule],
   controllers: [],
   providers: [],
 })

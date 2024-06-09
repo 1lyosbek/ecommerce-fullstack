@@ -6,12 +6,14 @@ import { UsersService } from '../users/users.service';
 import { UserNameAlreadyExist, UserNameOrPasswordWrongException } from './exception/auth.exception';
 import { Auth } from 'src/common/decorator/auth.decorator';
 import { RoleEnum } from 'src/common/enums/enums';
+import { AdminService } from '../admin/admin.service';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     @Inject("IUserService") private readonly userService: UsersService,
+    @Inject("IAdminService") private readonly adminService: AdminService,
     private readonly authService: AuthService
     ) {}
 
@@ -21,9 +23,8 @@ export class AuthController {
     return await this.authService.login(loginDto);
   }
   
-  @Auth(RoleEnum.OWNER)
-  @Post('sign-up')
-  async register(@Body() createDto: RegisterDto) {  
+  @Post('user/sign-up')
+  async registerUser(@Body() createDto: RegisterDto) {  
     const { data: foundUser } = await this.userService.findByUserName(
       createDto.UserName,
     );
@@ -31,6 +32,17 @@ export class AuthController {
     if (foundUser) {
       throw new UserNameAlreadyExist();
     } 
-    return await this.authService.register(createDto);
+    return await this.authService.registerUser(createDto);
+  }
+  @Post('admin/sign-up')
+  async registerAdmin(@Body() createDto: RegisterDto) {  
+    const { data: foundUser } = await this.adminService.findByUserName(
+      createDto.UserName,
+    );
+
+    if (foundUser) {
+      throw new UserNameAlreadyExist();
+    } 
+    return await this.authService.registerAdmin(createDto);
   }
 }

@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Query } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/decorator/auth.decorator';
 import { RoleEnum } from 'src/common/enums/enums';
 
@@ -10,10 +10,27 @@ import { RoleEnum } from 'src/common/enums/enums';
 export class UsersController {
   constructor(@Inject("IUserService") private readonly usersService: UsersService) {}
 
-  @Auth(RoleEnum.ADMIN)
-  @Get()
-  async findAll() {
-    return await this.usersService.findAll();
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'For search'
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'For limit'
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'For page'
+  })
+  @Get('search')
+  async findAll(@Query('search') search: string, @Query('limit') limit: number, @Query('page') page: number) {
+    return await this.usersService.findAll(search, limit, page);
   }
 
   @Auth(RoleEnum.ADMIN)

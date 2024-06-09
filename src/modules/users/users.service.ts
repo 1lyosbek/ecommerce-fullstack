@@ -3,15 +3,18 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { IUserService } from './interfaces/user.service';
 import { ResData } from 'src/lib/resData';
 import { UserEntity } from './entities/user.entity';
-import { IUserRepository } from './interfaces/user.repository';
+import { IUserEntityCount, IUserRepository } from './interfaces/user.repository';
 import { UserNotFoundException } from './exceptions/user.exceptions';
 
 @Injectable()
 export class UsersService implements IUserService {
   constructor(@Inject("IUserRepository") private readonly userRepository: IUserRepository){}
-  async findAll(): Promise<ResData<Array<UserEntity>>> {
-    const foundUsers = await this.userRepository.getAll();
-    return new ResData<Array<UserEntity>>("success", "all users", 200, foundUsers);
+  async findAll(word: string, limit: number, page: number): Promise<ResData<IUserEntityCount>> {
+    limit = limit > 0 ? limit : 10;
+    page = page > 0 ? page : 1;
+    page = (page - 1) * limit;
+    const foundUsers = await this.userRepository.getAll(word, limit, page);
+    return new ResData<IUserEntityCount>("success", "all users", 200, {users: foundUsers.users, count: foundUsers.count});
   }
 
   async findOne(id: number): Promise<ResData<UserEntity>> {

@@ -46,6 +46,7 @@ export class ProductsController {
   })
   @UseInterceptors(FilesInterceptor('files', 3, fileOptions))
   async create(@UploadedFiles() files: Array<Express.Multer.File>, @Body() dto: ICreateProductDto) {
+    console.log(dto);
     return await this.productsService.create(files, dto);
   }
   @ApiQuery({

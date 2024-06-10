@@ -5,5 +5,5 @@ export interface ICreateProductDto {
     category: string;
     units: string;
     description: string;
-    info: Object;
+    info: Array<object>;
 }

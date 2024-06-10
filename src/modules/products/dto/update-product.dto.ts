@@ -53,5 +53,5 @@ export class UpdateProductDto {
     })
     @IsObject()
     @IsOptional()
-    info: JSON;
+    info: Array<object>;
 }

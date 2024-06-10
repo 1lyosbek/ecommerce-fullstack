@@ -34,6 +34,7 @@ export class AuthController {
     } 
     return await this.authService.registerUser(createDto);
   }
+  @Auth(RoleEnum.OWNER)
   @Post('admin/sign-up')
   async registerAdmin(@Body() createDto: RegisterDto) {  
     const { data: foundUser } = await this.adminService.findByUserName(

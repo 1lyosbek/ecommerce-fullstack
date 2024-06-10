@@ -27,8 +27,8 @@ export class ProductEntity {
     @Column('text', { name: "urls", array: true, nullable: false })
     urls: Array<string>;
 
-    @Column({ name: "info", type: "json", nullable: false })
-    info: Object;
+    @Column('text', { name: "info", array: true, nullable: true })
+    info: Array<object>;
 
     @Column({ name: "available", type: "boolean", nullable: false })
     available: boolean;

@@ -28,17 +28,19 @@ export class UsersController {
     type: Number,
     description: 'For page'
   })
+  @Auth(RoleEnum.ADMIN, RoleEnum.OWNER)
   @Get('search')
   async findAll(@Query('search') search: string, @Query('limit') limit: number, @Query('page') page: number) {
     return await this.usersService.findAll(search, limit, page);
   }
 
-  @Auth(RoleEnum.ADMIN)
+  @Auth(RoleEnum.ADMIN, RoleEnum.OWNER, RoleEnum.USER)
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.usersService.findOne(+id);
   }
 
+  @Auth(RoleEnum.OWNER, RoleEnum.USER)
   @Auth(RoleEnum.OWNER)
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {

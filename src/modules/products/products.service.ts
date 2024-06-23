@@ -45,7 +45,7 @@ export class ProductsService implements IProductService {
     if (!foundProduct) {
       throw new ProductNotFoundException();
     }
-    console.log(foundProduct.info);
+    console.log(foundProduct.info[0]);
     return new ResData<ProductEntity>("success", "product found", 200, foundProduct);
   }
 

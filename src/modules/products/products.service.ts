@@ -16,7 +16,7 @@ export class ProductsService implements IProductService {
     const paths = [];
     for (let i = 0; i < files.length; i++) {
       const element = files[i];
-      element.path = `https://ecommerceapi.firdavsdev.uz/${element.path}`
+      element.path = `https://market.ilyosbekdev.uz/${element.path}`
       paths.push(element.path);
     }
     newProduct.title = createProductDto.title;
@@ -25,7 +25,7 @@ export class ProductsService implements IProductService {
     newProduct.category = createProductDto.category;
     newProduct.units = createProductDto.units;
     newProduct.description = createProductDto.description;
-    newProduct.info = createProductDto.info;
+    newProduct.info = [createProductDto.info];
     newProduct.available = true;
     newProduct.urls = paths;
     const createdProduct = await this.productRepository.create(newProduct);
@@ -45,7 +45,7 @@ export class ProductsService implements IProductService {
     if (!foundProduct) {
       throw new ProductNotFoundException();
     }
-    console.log(foundProduct.urls);
+    console.log(foundProduct.info);
     return new ResData<ProductEntity>("success", "product found", 200, foundProduct);
   }
 

@@ -15,7 +15,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @Auth(RoleEnum.ADMIN, RoleEnum.OWNER)
-  @Post()
+  @Post('create')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -28,10 +28,18 @@ export class ProductsController {
         units: { type: "string" },
         description: { type: "string" },
         info: {
-          type: "object",
-          properties: {
-            type: { type: "string" },
-            color: { type: "string" },
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              WiFiFunksiyasi: { type: "string" },
+              EnergiyaToifasi: { type: "string" },
+              SovutgichTuri: { type: "string" },
+              QoshimchaFunksiyasi: { type: "string" },
+              Massa: { type: "string" },
+              Kafolati: { type: "string" },
+              SaqlanganHarorati: { type: "string" },
+            },
           },
         },
         ['files']: {
